@@ -28,7 +28,7 @@
       }
       #unity-build-title { display: none; }
       #unity-loading-bar {
-        /* This is now handled by our custom overlay */
+        /* The default loading bar is replaced by our custom overlay */
         display: none;
       }
 
@@ -47,7 +47,7 @@
         font-family: Arial, sans-serif;
         font-size: 2em;
         z-index: 99;
-        cursor: default;
+        cursor: default; /* Not clickable until loading is finished */
       }
 
       /* --- ORIENTATION OVERLAY STYLE --- */
@@ -59,13 +59,13 @@
         height: 100vh;
         background: #000;
         color: white;
-        display: none;
+        display: none; /* Hidden by default */
         justify-content: center;
         align-items: center;
         flex-direction: column;
         font-family: Arial, sans-serif;
         font-size: 1.5em;
-        z-index: 100;
+        z-index: 100; /* Must be on top of everything */
       }
       #orientation-overlay svg {
         width: 100px;
@@ -95,6 +95,7 @@
     <div id="unity-container">
       <!-- Set the canvas base resolution to your target 1920x1080 -->
       <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
+      <!-- The default loading bar and footer are no longer needed -->
       <div id="unity-warning"></div>
     </div>
 
@@ -115,7 +116,7 @@
       }
       window.addEventListener('resize', checkOrientation);
       window.addEventListener('orientationchange', checkOrientation);
-      checkOrientation();
+      checkOrientation(); // Initial check
 
       function unityShowBanner(msg, type) {
         var warningBanner = document.querySelector("#unity-warning");
@@ -137,7 +138,7 @@
       }
 
       var buildUrl = "Build";
-      // --- IMPORTANT: Using the new file names for "Microbes" project ---
+      // --- Using the new file names for "Microbes" ---
       var loaderUrl = buildUrl + "/Microbes.loader.js";
       var config = {
         arguments: [],
@@ -171,14 +172,14 @@
         unityContainer.style.height = height + 'px';
       }
       window.addEventListener('resize', resizeGameContainer);
-      resizeGameContainer();
+      resizeGameContainer(); // Initial resize
 
       // --- UNITY INSTANCE CREATION & LOADING LOGIC ---
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-          // Update the loading percentage on the overlay
+          // Update the text on the overlay with the current loading progress
           statusText.innerHTML = `Loading... ${Math.round(progress * 100)}%`;
 
         }).then((unityInstance) => {
@@ -190,11 +191,13 @@
           // 2. Make the overlay look clickable
           statusOverlay.style.cursor = 'pointer';
           
-          // 3. Add the one-time click listener to start the game
+          // 3. Add the click listener that will start the game in fullscreen
           statusOverlay.addEventListener('click', () => {
+            // Hide the overlay
             statusOverlay.style.display = 'none';
+            // Request fullscreen
             unityInstance.SetFullscreen(1);
-          }, { once: true });
+          }, { once: true }); // '{ once: true }' is important, it makes the listener fire only once
 
         }).catch((message) => {
           alert(message);
