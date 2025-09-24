@@ -15,23 +15,21 @@
       }
       
       html, body {
-          background: #000; /* Black background for letterboxing */
+          background: #000;
           font-family: 'Roboto', sans-serif;
           overflow: hidden;
           width: 100%;
           height: 100%;
       }
 
-      /* Main container organizes the entire page layout */
       #page-container {
           width: 100vw;
           height: 100vh;
           display: flex;
           flex-direction: column;
-          background: linear-gradient(135deg, #000000 0%, #000000 0%);
+          background: #000;
       }
       
-      /* --- START: STYLES COPIED FROM EXAMPLE --- */
       #controls {
           background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(42, 42, 42, 0.95) 100%);
           padding: 12px 25px;
@@ -42,7 +40,7 @@
           border-bottom: 2px solid rgba(0, 0, 0);
           backdrop-filter: blur(10px);
           z-index: 10;
-          flex-shrink: 0; /* Prevents the bar from shrinking */
+          flex-shrink: 0;
       }
       
       .title-section { display: flex; align-items: center; gap: 15px; }
@@ -86,40 +84,43 @@
       
       .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
       .icon { font-size: 16px; margin-right: 8px; }
-      /* --- END: STYLES COPIED FROM EXAMPLE --- */
 
-      /* The unity container now grows to fill available space and centers the canvas */
       #unity-container {
-        flex: 1; /* Allows the container to grow */
-        min-height: 0; /* Necessary for flex-grow in some browsers */
+        flex: 1;
+        min-height: 0;
         display: flex;
         justify-content: center;
         align-items: center;
       }
       
       #unity-canvas {
-        /* The width and height are set by the letterboxing script */
         background: #000;
       }
 
-      /* When the page is fullscreen, hide the controls bar */
       #page-container:fullscreen #controls {
           display: none;
       }
 
-      /* Loading overlay that replaces the old "Tap to Start" */
       #loading-overlay {
           position: fixed; top: 0; left: 0;
           width: 100%; height: 100%;
           background: rgba(0, 0, 0, 0.8); color: white;
-          display: flex; justify-content: center; align-items: center;
+          display: flex; flex-direction: column; justify-content: center; align-items: center;
           font-family: Arial, sans-serif; font-size: 2em; z-index: 99;
+      }
+
+      /* Style for the new start button */
+      #start-button {
+          font-size: 1.2em;
+          padding: 20px 40px;
+          border-radius: 50px;
+          font-family: 'Bebas Neue', cursive;
+          letter-spacing: 2px;
       }
     </style>
   </head>
   <body>
     <div id="page-container">
-      <!-- The new controls bar -->
       <div id="controls">
           <div class="title-section">
               <div class="game-logo">🎮</div>
@@ -135,27 +136,28 @@
           </div>
       </div>
 
-      <!-- Unity game content area -->
       <div id="unity-container">
         <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
         <div id="unity-warning"></div>
       </div>
     </div>
 
-    <!-- The loading overlay (replaces "Tap to Start") -->
+    <!-- Modified loading overlay -->
     <div id="loading-overlay">
       <div id="loading-text">Loading... 0%</div>
+      <!-- Start button, hidden by default -->
+      <button id="start-button" style="display: none;">Click to Start</button>
     </div>
     
     <script>
-      // --- ELEMENT SELECTORS ---
       var pageContainer = document.querySelector("#page-container");
       var unityContainer = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingOverlay = document.querySelector("#loading-overlay");
       var loadingText = document.querySelector("#loading-text");
+      // Selector for the new button
+      var startButton = document.querySelector("#start-button");
 
-      // --- START: NEW FUNCTIONS FROM EXAMPLE ---
       function toggleFullscreen() {
           if (!document.fullscreenElement) {
               pageContainer.requestFullscreen().catch(err => {
@@ -167,21 +169,16 @@
       }
 
       function restartGame() {
-          // The simplest and most reliable way to restart a WebGL game
           location.reload();
       }
-      // --- END: NEW FUNCTIONS FROM EXAMPLE ---
 
-      // --- SCALING AND LETTERBOXING LOGIC (Adapted) ---
       function applyLetterboxing() {
           const targetAspectRatio = 1920 / 1080;
-          // We measure the container, which has the available space after the controls bar
           let containerWidth = unityContainer.offsetWidth;
           let containerHeight = unityContainer.offsetHeight;
           let containerAspectRatio = containerWidth / containerHeight;
           
           let newWidth, newHeight;
-
           if (containerAspectRatio > targetAspectRatio) {
               newHeight = containerHeight;
               newWidth = newHeight * targetAspectRatio;
@@ -190,7 +187,6 @@
               newHeight = newWidth / targetAspectRatio;
           }
           
-          // Apply the calculated size to the canvas itself
           canvas.style.width = newWidth + 'px';
           canvas.style.height = newHeight + 'px';
       }
@@ -198,17 +194,15 @@
       window.addEventListener('resize', applyLetterboxing);
       window.addEventListener('orientationchange', applyLetterboxing);
 
-      function unityShowBanner(msg, type) { /* ... This can be left empty or implemented if you need banner messages ... */ }
+      function unityShowBanner(msg, type) { }
 
       var buildUrl = "Build";
-      // === IMPORTANT: THESE ARE THE FILE PATHS FROM YOUR LATEST FILE ===
       var loaderUrl = buildUrl + "/Microbes.loader.js";
       var config = {
         arguments: [],
         dataUrl: buildUrl + "/Microbes.data",
         frameworkUrl: buildUrl + "/Microbes.framework.js",
         codeUrl: buildUrl + "/Microbes.wasm",
-        // === END OF IMPORTANT CHANGES ===
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Shorted",
@@ -227,17 +221,24 @@
         createUnityInstance(canvas, config, (progress) => {
           loadingText.innerHTML = `Loading... ${Math.round(progress * 100)}%`;
         }).then((unityInstance) => {
-          // Game is loaded, hide the overlay and request fullscreen
-          loadingOverlay.style.display = 'none';
-          pageContainer.requestFullscreen().catch(err => {
-            console.error(`Error attempting to enable full-screen mode automatically: ${err.message} (${err.name})`);
-          });
+          // --- CHANGE ---
+          // Game is loaded. Hide loading text and show the start button.
+          loadingText.style.display = 'none';
+          startButton.style.display = 'block';
         }).catch((message) => {
           alert(message);
         });
       };
       
-      // Update button text based on fullscreen state
+      // --- NEW ---
+      // Add a click event listener to the start button
+      startButton.addEventListener('click', () => {
+        // Hide the entire loading overlay
+        loadingOverlay.style.display = 'none';
+        // Now request fullscreen
+        toggleFullscreen();
+      });
+      
       document.addEventListener('fullscreenchange', () => {
           const fullscreenButton = document.getElementById('fullscreen-button');
           if (document.fullscreenElement) {
@@ -245,15 +246,11 @@
           } else {
               fullscreenButton.innerHTML = '<span class="icon">⛶</span><span>Fullscreen</span>';
           }
-          // Re-calculate letterboxing after a small delay to allow the DOM to update
           setTimeout(applyLetterboxing, 100);
       });
 
-      // Initial setup calls before loading starts
       applyLetterboxing(); 
       document.body.appendChild(script);
     </script>
   </body>
-</html>```
-
-By making this change, the game will attempt to enter fullscreen mode as soon as it's ready, providing a more immersive experience for the user from the start.
+</html>
