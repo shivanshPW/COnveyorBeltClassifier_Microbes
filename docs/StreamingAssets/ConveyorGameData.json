@@ -18,8 +18,8 @@
       "reactor": 0,
 
       "containers": [
-        { "name": "FRIENDLY", "id": "Natural" },
-        { "name": "HARMFUL", "id": "Synthethic" }
+        { "name": "HARMFUL", "id": "Synthethic" },
+        { "name": "FRIENDLY", "id": "Natural" }
       ],
 
       "items": [
@@ -99,8 +99,8 @@
       "reactor": 1,
 
       "containers": [
-        { "name": "FRIENDLY", "id": "Natural" },
-        { "name": "HARMFUL", "id": "Synthethic" }
+        { "name": "HARMFUL", "id": "Synthethic" },
+        { "name": "FRIENDLY", "id": "Natural" }
       ],
       "items": [
         {
