@@ -208,9 +208,8 @@
         createUnityInstance(canvas, config, (progress) => {
           loadingText.innerHTML = `Loading... ${Math.round(progress * 100)}%`;
         }).then((unityInstance) => {
-          // Game is loaded. Hide the loading overlay and request fullscreen.
+          // Game is loaded. Hide the loading overlay to start the game.
           loadingOverlay.style.display = 'none';
-          toggleFullscreen();
         }).catch((message) => {
           alert(message);
         });
