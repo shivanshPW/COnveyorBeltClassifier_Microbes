@@ -37,13 +37,13 @@
         },
         {
           "id": "sacc",
-          "display_text": "Silk",
+          "display_text": "",
           "correct_category_name": "FRIENDLY",
           "presentation_mode": "NAME"
         },
         {
           "id": "yeast",
-          "display_text": "rayon",
+          "display_text": "",
           "correct_category_name": "FRIENDLY",
           "presentation_mode": "NAME"
         },
@@ -55,7 +55,7 @@
         },
         {
           "id": "lactobacillus",
-          "display_text": "jute",
+          "display_text": "",
           "correct_category_name": "FRIENDLY",
           "presentation_mode": "NAME"
         },
@@ -67,19 +67,19 @@
         },
         {
           "id": "penincillium",
-          "display_text": "nylon",
+          "display_text": "",
           "correct_category_name": "FRIENDLY",
           "presentation_mode": "NAME"
         },
         {
           "id": "rhizombium",
-          "display_text": "polyester",
+          "display_text": "",
           "correct_category_name": "FRIENDLY",
           "presentation_mode": "NAME"
         },
         {
           "id": "tb",
-          "display_text": "spandex",
+          "display_text": "",
           "correct_category_name": "HARMFUL",
           "presentation_mode": "NAME"
         }
@@ -96,80 +96,82 @@
       "xp_per_incorrect": -3,
       "combo_bonus_xp": 0,
       "target_xp": 70,
-      "reactor": 1,
+      "reactor": 0,
 
       "containers": [
-        { "name": "HARMFUL", "id": "Synthethic" },
-        { "name": "FRIENDLY", "id": "Natural" }
+        { "name": "BACTERIA", "id": "BACTERIA" },
+        { "name": "VIRUS", "id": "VIRUS" },
+        { "name": "FUNGI", "id": "FUNGI" },
+        { "name": "PROTOZOA", "id": "PROTOZOA" }
       ],
       "items": [
         {
-          "id": "commonCold",
+          "id": "Typhoid",
+          "display_text": "Typhoid",
+          "correct_category_name": "BACTERIA",
+          "presentation_mode": "PROPERTY_CUE",
+          "reaction_type": "NO_REACTION"
+        },
+        {
+          "id": "Common Cold",
           "display_text": "Common Cold",
-          "correct_category_name": "HARMFUL",
+          "correct_category_name": "VIRUS",
           "presentation_mode": "PROPERTY_CUE",
           "reaction_type": "NO_REACTION"
         },
         {
-          "id": "terleSewagetreene",
-          "display_text": "Cleans Water",
-          "correct_category_name": "FRIENDLY",
-          "presentation_mode": "PROPERTY_CUE",
-          "reaction_type": "NO_REACTION"
-        },
-        {
-          "id": "curd",
-          "display_text": "Fermentation",
-          "correct_category_name": "FRIENDLY",
+          "id": "Ringworm",
+          "display_text": "Ringworm",
+          "correct_category_name": "FUNGI",
           "presentation_mode": "PROPERTY_CUE",
           "hint_text": "No litmus change?"
         },
         {
-          "id": "foodbackteria",
-          "display_text": "Spoils Food",
-          "correct_category_name": "HARMFUL",
+          "id": "Malaria",
+          "display_text": "Malaria",
+          "correct_category_name": "PROTOZOA",
           "presentation_mode": "PROPERTY_CUE",
           "reaction_type": "PH_INDICATOR_RED"
         },
         {
-          "id": "vaccine",
-          "display_text": "Disease Prevention",
-          "correct_category_name": "FRIENDLY",
+          "id": "Tuberculosis",
+          "display_text": "Tuberculosis",
+          "correct_category_name": "BACTERIA",
           "presentation_mode": "PROPERTY_CUE",
           "reaction_type": "PH_INDICATOR_BLUE"
         },
         {
-          "id": "fungi",
+          "id": "Flu",
           "display_text": "Breaks Down Waste",
-          "correct_category_name": "FRIENDLY",
+          "correct_category_name": "VIRUS",
           "presentation_mode": "PROPERTY_CUE",
           "reaction_type": "PH_INDICATOR_GREEN"
         },
         {
-          "id": "meable",
+          "id": "Athlete's Foot",
           "display_text": "Highly Contagious",
-          "correct_category_name": "HARMFUL",
+          "correct_category_name": "FUNGI",
           "presentation_mode": "PROPERTY_CUE",
           "hint_text": "Sour taste indicator?"
         },
         {
-          "id": "ecoli",
+          "id": "Amoebiasis",
           "display_text": "Aids Digestion",
-          "correct_category_name": "FRIENDLY",
+          "correct_category_name": "PROTOZOA",
           "presentation_mode": "PROPERTY_CUE",
           "hint_text": "Bitter taste indicator?"
         },
         {
-          "id": "foot",
+          "id": "Cholera",
           "display_text": "Foot Infection",
-          "correct_category_name": "HARMFUL",
+          "correct_category_name": "BACTERIA",
           "presentation_mode": "PROPERTY_CUE",
           "reaction_type": "NO_REACTION"
         },
         {
-          "id": "ringworm",
+          "id": "Measles",
           "display_text": "Skin Infection",
-          "correct_category_name": "HARMFUL",
+          "correct_category_name": "VIRUS",
           "presentation_mode": "PROPERTY_CUE",
           "reaction_type": "METAL_BUBBLES"
         }
